@@ -18,7 +18,9 @@ class InterspireServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('aglipanci/interspire');
+		$this->publishes([
+			__DIR__.'/../../config/config.php' => config_path('interspire.php')
+		], 'config');
 	}
 
 	/**

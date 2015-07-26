@@ -1,9 +1,7 @@
-laravel-interspire
+laravel-interspire (for Laravel 5.1)
 ==================
 
-<a href="https://travis-ci.org/aglipanci/laravel-interspire"><img src="https://travis-ci.org/aglipanci/laravel-interspire.svg?branch=master"></a> [![SensioLabsInsight](https://insight.sensiolabs.com/projects/b4d24331-010a-4bf3-be15-614e84607a51/mini.png)](https://insight.sensiolabs.com/projects/b4d24331-010a-4bf3-be15-614e84607a51)
-
-Interspire API Intergration Made Easy
+Interspire API Intergration... This is forked from aflipanci/laravel-interspire and made compatible with Laravel 5.1
 
 ## Installation
 
@@ -11,7 +9,7 @@ Add laravel-interspire to your composer.json file:
 
 ```
 "require": {
-  "aglipanci/interspire": "dev-master"
+  "swissweb/interspire": "dev-master"
 }
 ```
 
@@ -23,24 +21,24 @@ $ composer update
 
 ### Registering the Package
 
-Register the service provider within the ```providers``` array found in ```app/config/app.php```:
+Register the service provider within the ```providers``` array found in ```config/app.php```:
 
 ```php
 'providers' => array(
 	// ...
 	
-	'Aglipanci\Interspire\InterspireServiceProvider',
+	Aglipanci\Interspire\InterspireServiceProvider::class,
 )
 ```
 
-Add an alias within the ```aliases``` array found in ```app/config/app.php```:
+Add an alias within the ```aliases``` array found in ```config/app.php```:
 
 
 ```php
 'aliases' => array(
 	// ...
 	
-	'Interspire'     => 'Aglipanci\Interspire\Facades\Interspire',
+	'Interspire'     => Aglipanci\Interspire\Facades\Interspire::class,
 )
 ```
 
@@ -49,7 +47,7 @@ Add an alias within the ```aliases``` array found in ```app/config/app.php```:
 Create configuration file for package using artisan command
 
 ```
-$ php artisan config:publish aglipanci/interspire
+$ php artisan vendor:publish
 ```
 
 And edit the config file with your Interspire API URL, Username and Token.

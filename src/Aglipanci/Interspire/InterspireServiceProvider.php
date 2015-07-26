@@ -5,13 +5,6 @@ use Illuminate\Support\ServiceProvider;
 class InterspireServiceProvider extends ServiceProvider {
 
 	/**
-	 * Indicates if loading of the provider is deferred.
-	 *
-	 * @var bool
-	 */
-	protected $defer = false;
-
-	/**
 	 * Bootstrap the application events.
 	 *
 	 * @return void
@@ -30,20 +23,9 @@ class InterspireServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app['interspire'] = $this->app->share(function($app)
-		{
-			return new Interspire($app['config']);
+		$this->app->singleton('Aglipanci\Interspire\Interspire', function ($app) {
+			return new Interspire();
 		});
-	}
-
-	/**
-	 * Get the services provided by the provider.
-	 *
-	 * @return array
-	 */
-	public function provides()
-	{
-		return array('interspire');
 	}
 
 }

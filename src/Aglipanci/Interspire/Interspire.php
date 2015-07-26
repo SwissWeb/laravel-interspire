@@ -1,17 +1,24 @@
 <?php namespace Aglipanci\Interspire;
 
-use Config;
 
 class Interspire {
 
-	/**	
-	 * [postData description]
-	 * @param  [type] $xml [description]
-	 * @return [type]      [description]
+
+	public function __construct()
+	{
+		$this->api_url = config('interspire.url');
+		$this->api_user = config('interspire.api_user');
+		$this->api_token = config('interspire.api_token');
+	}
+
+	/**
+	 * POST data to API
+	 * @param $xml
+	 * @return bool
 	 */
 	private function postData($xml)
 	{
-		$ch = curl_init(Config::get('interspire::url'));
+		$ch = curl_init($this->api_url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_POST, 1);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
@@ -26,7 +33,8 @@ class Interspire {
 		{
 			$xml_doc = simplexml_load_string($result);
 
-			if ($xml_doc->status == 'SUCCESS') 
+			/** @noinspection PhpUndefinedFieldInspection */
+			if ($xml_doc->status == 'SUCCESS')
 			{
 				return true;
 			} 
@@ -39,17 +47,17 @@ class Interspire {
 	}
 
 	/**
-	 * [addSubscriberToList description]
-	 * @param [type] $name    [description]
-	 * @param [type] $surname [description]
-	 * @param [type] $email   [description]
-	 * @param [type] $list_id [description]
+	 * Add subscriber to list
+	 * @param $name
+	 * @param $surname
+	 * @param $email
+	 * @param $list_id
 	 */
 	public function addSubscriberToList($name, $surname, $email, $list_id){
 
 		$xml = '<xmlrequest>
-		<username>'.Config::get('interspire::api_user').'</username>
-		<usertoken>'.Config::get('interspire::api_token').'</usertoken>
+		<username>'.$this->api_user.'</username>
+		<usertoken>'.$this->api_token.'</usertoken>
 		<requesttype>subscribers</requesttype>
 		<requestmethod>AddSubscriberToList</requestmethod>
 		<details>
@@ -74,39 +82,60 @@ class Interspire {
 		$this->postData($xml);
 	}
 
-	/**	
-	 * [deleteSubscriber description]
-	 * @param  [type] $email [description]
-	 * @return [type]        [description]
+	/**
+	 * Delete a subscriber
+	 * @param $email
+	 * @param int|string $list_id
 	 */
-	public function deleteSubscriber($email)
+	public function addBannedSubscriber($email, $list_id = 'global')
 	{
-	 
+
 		$xml = '<xmlrequest>
-		<username>'.Config::get('interspire::api_user').'</username>
-		<usertoken>'.Config::get('interspire::api_token').'</usertoken>
+		<username>'.$this->api_user.'</username>
+		<usertoken>'.$this->api_token.'</usertoken>
 		<requesttype>subscribers</requesttype>
-		<requestmethod>DeleteSubscriber</requestmethod>
+		<requestmethod>AddBannedSubscriber</requestmethod>
 		<details>
 		<emailaddress>'.$email.'</emailaddress>
-		<list>1</list>
+		<list>'.$list_id.'</list>
 		</details>
 		</xmlrequest>';
 
 		$this->postData($xml);
 	}
 
-	/**	
-	 * [isOnList description]
-	 * @param  [type] $email [description]
-	 * @param  [type] $list_id [description]
-	 * @return void        [description]
-	 */		
-	public function isOnList($email, $list_id)
+	/**
+	 * Delete a subscriber
+	 * @param $email
+	 * @param int $list_id
+	 */
+	public function deleteSubscriber($email, $list_id = 1)
+	{
+	 
+		$xml = '<xmlrequest>
+		<username>'.$this->api_user.'</username>
+		<usertoken>'.$this->api_token.'</usertoken>
+		<requesttype>subscribers</requesttype>
+		<requestmethod>DeleteSubscriber</requestmethod>
+		<details>
+		<emailaddress>'.$email.'</emailaddress>
+		<list>'.$list_id.'</list>
+		</details>
+		</xmlrequest>';
+
+		$this->postData($xml);
+	}
+
+	/**
+	 * Check if user is on list
+	 * @param $email
+	 * @param $list_id
+	 */
+	public function isSubscriberOnList($email, $list_id)
 	{
 		$xml = '<xmlrequest>
-		<username>'.Config::get('interspire::api_user').'</username>
-		<usertoken>'.Config::get('interspire::api_token').'</usertoken>
+		<username>'.$this->api_user.'</username>
+		<usertoken>'.$this->api_token.'</usertoken>
 		<requesttype>subscribers</requesttype>
 		<requestmethod>IsSubscriberOnList</requestmethod>
 		<details>

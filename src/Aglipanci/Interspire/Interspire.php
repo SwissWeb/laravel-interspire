@@ -27,10 +27,10 @@ class Interspire
     }
 
     /**
-     * POST data to API
-     * @param $xml
-     * @return string
-     */
+ * POST data to API
+ * @param $xml
+ * @return string
+ */
     private function postData($xml)
     {
         $ch = curl_init($this->api_url);
@@ -91,12 +91,12 @@ class Interspire
     }
 
     /**
-     * Delete a subscriber
+     * Ban a subscriber
      * @param $email
      * @param int|string $list_id
      * @return string
      */
-    public function addBannedSubscriber($email, $list_id = 'global')
+    public function addBannedSubscriber($email, $list_id = 'g')
     {
 
         $xml = '<xmlrequest>
@@ -158,4 +158,80 @@ class Interspire
         return $this->postData($xml);
     }
 
+    /**
+     * @param $email
+     * @param int $list_id
+     * @return string
+     */
+    public function bounceSubscriber($email, $list_id = 1)
+    {
+        $xml = '<xmlrequest>
+		<username>' . $this->api_user . '</username>
+		<usertoken>' . $this->api_token . '</usertoken>
+		<requesttype>subscribers</requesttype>
+		<requestmethod>BounceSubscriber</requestmethod>
+		<details>
+		<emailaddress>' . $email . '</emailaddress>
+		<listid>' . $list_id . '</listid>
+		</details>
+		</xmlrequest>';
+
+        return $this->postData($xml);
+    }
+
+
+    public function unsubscribeSubscriber($email, $list_id = 1)
+    {
+        $xml = '<xmlrequest>
+		<username>' . $this->api_user . '</username>
+		<usertoken>' . $this->api_token . '</usertoken>
+		<requesttype>subscribers</requesttype>
+		<requestmethod>UnsubscribeSubscriber</requestmethod>
+		<details>
+		<emailaddress>' . $email . '</emailaddress>
+		<listid>' . $list_id . '</listid>
+		</details>
+		</xmlrequest>';
+
+        return $this->postData($xml);
+    }
+
+    /**
+     * @param $email
+     * @param string $list_ids
+     * @return array|null
+     */
+    public function getAllListsForEmailAddress($email, $list_ids = '1,2,3,4,5')
+    {
+        $xml = '<xmlrequest>
+		<username>' . $this->api_user . '</username>
+		<usertoken>' . $this->api_token . '</usertoken>
+		<requesttype>subscribers</requesttype>
+		<requestmethod>GetAllListsForEmailAddress</requestmethod>
+		<details>
+		<email>' . $email . '</email>
+		<listids>' . $list_ids . '</listids>
+		</details>
+		</xmlrequest>';
+
+        $ch = curl_init($this->api_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+        $result = curl_exec($ch);
+
+        if ($result === false || is_null($result) || empty($result))
+            return null;
+
+        $xml_doc = simplexml_load_string($result);
+
+        $list_ids = [];
+        /** @noinspection PhpUndefinedFieldInspection */
+        foreach ($xml_doc->data->item as $data)
+        {
+            $list_ids[] = (string) $data->listid;
+        }
+
+        return (array) $list_ids;
+    }
 }

@@ -21,9 +21,12 @@ class Interspire
 
     public function __construct()
     {
-        $this->api_url = config('interspire.url');
-        $this->api_user = config('interspire.api_user');
-        $this->api_token = config('interspire.api_token');
+        $this->api_url = env('INTERSPIRE_URL', config('interspire.url'));
+        $this->api_user = env('INTERSPIRE_USER', config('interspire.api_user'));
+        $this->api_token = env('INTERSPIRE_TOKEN', config('interspire.api_token'));
+
+        if (is_null($this->api_url) || is_null($this->api_user) || is_null($this->api_token))
+            abort(403, 'Some Interspire credentials missing');
     }
 
     /**

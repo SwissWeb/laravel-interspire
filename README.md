@@ -57,22 +57,28 @@ And edit the config file with your Interspire API URL, Username and Token.
 
 ### Basic usage
 
-To add a new Subscriber to a list you should add name, surname, email and the list id (which you get from interspire);
+####To add a new Subscriber to a list you should add name, surname, email and the list id (which you get from interspire);
 
 ```php
 Interspire::addSubscriberToList('John', 'Smith', 'jsmith@gmail.com', 1);
 ```
 
-To delete an existing Subscriber you need only the email address:
+####To delete an existing Subscriber you need only the email address:
 
 ```php
 Interspire::deleteSubscriber('jsmith@gmail.com');
 ```
 
-To check if a subscriber is already on a specific list:
+####To check if a subscriber is already on a specific list:
 
 ```php
-Interspire::isOnList('jsmith@gmail.com', 2)
+Interspire::isSubscriberOnList('jsmith@gmail.com', 2)
 ```
 
+####To add a subscriber to the banned list:
+
+```php
+Interspire::addBannedSubscriber('jsmith@gmail.com', 2)
+```
+if you leave the list_id parameter empty, the ban will be global
 	

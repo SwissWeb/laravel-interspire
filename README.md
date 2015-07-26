@@ -57,7 +57,7 @@ And edit the config file with your Interspire API URL, Username and Token.
 
 ### Basic usage
 
-####To add a new Subscriber to a list you should add name, surname, email and the list id (which you get from interspire);
+####To add a new Subscriber to a list you should add name, surname, email and the list id
 
 ```php
 Interspire::addSubscriberToList('John', 'Smith', 'jsmith@gmail.com', 1);

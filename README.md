@@ -82,3 +82,27 @@ Interspire::addBannedSubscriber('jsmith@gmail.com', 2)
 ```
 if you leave the list_id parameter empty, the ban will be global
 	
+####To tag a subscriber as bounced
+
+```php
+Interspire::bounceSubscriber('jsmith@gmail.com', 2)
+```
+####To unsubscribe a subscriber
+
+```php
+Interspire::unsubscribeSubscriber('jsmith@gmail.com', 2)
+```
+
+####To get an array of list(s) that an email is subscribed to
+
+```php
+Interspire::getAllListsForEmailAddress('jsmith@gmail.com', '2,3,5')
+```
+You can filter the lists checked with a coma separated string but if you leave it empty it will check all availables list with the `getLists()` method
+
+####To get all lists that exist
+
+```php
+Interspire::getLists()
+```
+You can filter the lists checked with a coma separated string but if you leave it empty it will check all availables list with the `getLists()` method

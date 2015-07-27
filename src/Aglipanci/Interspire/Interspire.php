@@ -209,8 +209,6 @@ class Interspire
         if (is_null($list_ids))
             $list_ids = implode(',', $this->getLists());
 
-        $list_ids = "'2,3'";
-
         $xml = '<xmlrequest>
 		<username>' . $this->api_user . '</username>
 		<usertoken>' . $this->api_token . '</usertoken>

@@ -99,7 +99,7 @@ class Interspire
      * @param int|string $list_id
      * @return string
      */
-    public function addBannedSubscriber($email, $list_id = 'g')
+    public function addBannedSubscriber($email, $list_id = 'global')
     {
 
         $xml = '<xmlrequest>
@@ -109,7 +109,7 @@ class Interspire
 		<requestmethod>AddBannedSubscriber</requestmethod>
 		<details>
 		<emailaddress>' . $email . '</emailaddress>
-		<list>' . $list_id . '</list>
+		<listid>' . $list_id . '</listid>
 		</details>
 		</xmlrequest>';
 

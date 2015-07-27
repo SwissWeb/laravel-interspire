@@ -204,8 +204,13 @@ class Interspire
      * @param string $list_ids
      * @return array|null
      */
-    public function getAllListsForEmailAddress($email, $list_ids = '1,2,3,4,5')
+    public function getAllListsForEmailAddress($email, $list_ids = null)
     {
+        if (is_null($list_ids))
+            $list_ids = implode(',', $this->getLists());
+
+        $list_ids = "'2,3'";
+
         $xml = '<xmlrequest>
 		<username>' . $this->api_user . '</username>
 		<usertoken>' . $this->api_token . '</usertoken>
@@ -228,6 +233,9 @@ class Interspire
 
         $xml_doc = simplexml_load_string($result);
 
+        if((string) $xml_doc->status == 'FAILED')
+            return null;
+
         $list_ids = [];
         /** @noinspection PhpUndefinedFieldInspection */
         foreach ($xml_doc->data->item as $data)
@@ -236,5 +244,47 @@ class Interspire
         }
 
         return (array) $list_ids;
+    }
+
+
+    /**
+     * Get All available lists
+     *
+     * @return null|array
+     */
+    public function getLists()
+    {
+        $xml = '<xmlrequest>
+		<username>' . $this->api_user . '</username>
+		<usertoken>' . $this->api_token . '</usertoken>
+		<requesttype>lists</requesttype>
+		<requestmethod>GetLists</requestmethod>
+		<details>
+		</details>
+		</xmlrequest>';
+
+        $ch = curl_init($this->api_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $xml);
+        $result = curl_exec($ch);
+
+        if ($result === false || is_null($result) || empty($result))
+            return null;
+
+        $response = (array) simplexml_load_string($result);
+
+        if ($response['status'] == 'SUCCESS')
+        {
+            $listids = [];
+            foreach($response['data'] as $list)
+            {
+                $listids[] = (string) $list->listid;
+            }
+
+            return (array) $listids;
+        }
+
+        return null;
     }
 }

@@ -105,4 +105,6 @@ You can filter the lists checked with a coma separated string but if you leave i
 ```php
 Interspire::getLists()
 ```
-You can filter the lists checked with a coma separated string but if you leave it empty it will check all availables list with the `getLists()` method
+
+
+####That's all for now !
